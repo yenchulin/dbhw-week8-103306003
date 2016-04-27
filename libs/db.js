@@ -1,6 +1,17 @@
-var mysql = require('mysql');
-var debug = require('debug')('MYSQL');
+//一樣在連接DB的時候改採用knex來進行連接
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host     : '127.0.0.1',
+    port     :  8889,
+    user     : 'root',
+    password : 'root',
+    database : 'blog'
+  },
+  pool: {
+    min: 0,
+    max: 7
+  }
+});
 
-var pool = mysql.createPool(process.env.DB_PATH || 'mysql://root:root@localhost:8889/blog');
-
-module.exports = pool;
+module.exports = knex;
