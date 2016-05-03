@@ -22,7 +22,7 @@
 
                 <% articleList.forEach(function(article) { %>
                       <div class="post-preview">
-                          <a href="post.html">
+                          <a href="/article/<%= article.id %>">
                               <h2 class="post-title">
                                 <%= article.title %>
                               </h2>
@@ -49,4 +49,3 @@
 
     <hr>
     <% include ./footer %>
-  

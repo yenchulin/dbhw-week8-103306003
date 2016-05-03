@@ -36,7 +36,13 @@ Article.get = function(articleId, cb) {
       id : articleId
     })
     .map(function(row) {
-      return new Article(row);
+      return new Article({
+        id : row.id,
+        title : row.title,
+        memberId : row.member_id, //這邊剛剛忘記修正了
+        content : row.content,
+        createdAt : row.createdAt
+      });
     })
     .then(function(articleList) {
       if(articleList.length) {
