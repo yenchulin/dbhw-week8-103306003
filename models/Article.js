@@ -4,6 +4,7 @@ var GeneralErrors = require('../errors/GeneralErrors');
 var Article = function(options) {
   this.id = options.id;
   this.title = options.title;
+  this.memberId = options.memberId;
   this.content = options.content;
   this.createdAt = options.createdAt;
 };
@@ -12,7 +13,13 @@ Article.getAll = function(cb) {
   db.select()
     .from('article')
     .map(function(row) {
-      return new Article(row);
+      return new Article({
+        id : row.id,
+        title : row.title,
+        memberId : row.member_id, //這邊剛剛忘記修正了
+        content : row.content,
+        createdAt : row.createdAt
+      });
     })
     .then(function(articleList) {
       cb(null, articleList);
@@ -67,7 +74,8 @@ Article.prototype.save = function (cb) {
     db('article')
       .insert({
         title : this.title,
-        content : this.content
+        content : this.content,
+        memberId : this.memberId
       })
       .then(function(result) {
         this.id = result[0];
