@@ -5,34 +5,8 @@ var Article = require('../models/Article');
 var async = require('async');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Article.getAll(function(err, articleList) {
-    if(err) {
-      next();
-    } else {
-      //這邊的做法是使用async each這樣的方式幫我們從articleList中一筆筆去找到member，然後新增一個key叫member在article物件中
-      async.each(articleList, function(article, cb) {
-        Member.get(article.memberId, function(err, member) {
-          if(err) {
-            cb(err);
-          } else {
-            article.member = member;
-            cb(null);
-          }
-        });
-      }, function(err){
-        if(err) {
-          res.status = err.code;
-          next();
-        } else {
-          res.render('index',
-          {
-            member : req.session.member || null,
-            articleList: articleList
-          });
-        }
-      });
-
-    }
+  res.render('register', {
+    member : null
   });
 });
 
@@ -49,11 +23,8 @@ router.get('/members/:memberId', function(req, res) {
 
 });
 
-//所以我們這樣就完成了一個model的function
-//
-//在這邊再測試一次是否可以進行新增或是修改
+router.post('/', function(req, res, next) {
 
-router.post('/members', function(req, res) {
   //首先必須先產生出一個Member的物件在進行save
   var newMember = new Member({
     name : req.body.name,
@@ -62,12 +33,18 @@ router.post('/members', function(req, res) {
   });
   newMember.save(function(err) {
     if(err) {
-      res.status(err.code);
-      res.json(err);
+      next(err);
     } else {
-      res.json(newMember);
+      //再重新導向之前，我們要讓使用者登入，因此我們需要使用到session
+      req.session.member = newMember;
+      res.redirect('/');
     }
   });
+});
+
+router.post('/logout', function(req, res, next) {
+  req.session.member = null;
+  res.redirect('/');
 });
 
 router.put('/members/:memberId', function(req, res) {
