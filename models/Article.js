@@ -81,7 +81,7 @@ Article.prototype.save = function (cb) {
       .insert({
         title : this.title,
         content : this.content,
-        memberId : this.memberId
+        member_id : this.memberId
       })
       .then(function(result) {
         this.id = result[0];

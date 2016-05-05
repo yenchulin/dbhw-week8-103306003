@@ -4,6 +4,15 @@ var Member = require('../models/Member');
 var Article = require('../models/Article');
 var async = require('async');
 
+router.get('/new', function(req, res) {
+  if(!req.session.member) {
+    res.redirect('/');
+  }
+
+  res.render('postArticle', {
+    member : req.session.member || null
+  });
+});
 
 //members test
 router.get('/:articleId', function(req, res, next) {
@@ -29,11 +38,17 @@ router.get('/:articleId', function(req, res, next) {
 });
 
 
-//TODO
-router.post('/articles', function(req, res) {
+
+
+router.post('/', function(req, res) {
+  if(!req.session.member) {
+    res.redirect('/');
+  }
+
   var newArticle = new Article({
     title : req.body.title,
-    content : req.body.content
+    content : req.body.content,
+    memberId : req.session.member.id
   });
 
   newArticle.save(function(err) {
@@ -41,7 +56,8 @@ router.post('/articles', function(req, res) {
       res.status = err.code;
       res.json(err);
     } else {
-      res.json(newArticle);
+      
+      res.redirect("/");
     }
   });
 });
