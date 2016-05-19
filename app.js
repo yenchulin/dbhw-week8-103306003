@@ -9,7 +9,8 @@ var session = require('express-session');
 var routes = require('./routes/index');
 var register = require('./routes/register');
 var users = require('./routes/users');
-var article = require('./routes/article')
+var article = require('./routes/article');
+var login = require('./routes/login');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/article', article);
 app.use('/register', register);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -61,6 +63,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
