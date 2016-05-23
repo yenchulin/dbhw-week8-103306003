@@ -19,7 +19,7 @@ router.get('/members/:memberId', function(req, res) {
     } else {
       res.json(member);
     }
-  })
+  });
 
 });
 

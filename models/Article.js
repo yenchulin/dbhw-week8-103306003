@@ -27,7 +27,7 @@ Article.getAll = function(cb) {
     .catch(function(err) {
       cb(new GeneralErrors.Database());
     });
-}
+};
 
 Article.get = function(articleId, cb) {
   db.select()
@@ -56,7 +56,7 @@ Article.get = function(articleId, cb) {
       console.log(err);
       cb(new GeneralErrors.Database());
     });
-}
+};
 
 //instance fnuction
 Article.prototype.save = function (cb) {
@@ -75,7 +75,7 @@ Article.prototype.save = function (cb) {
       .catch(function(err) {
         console.log(err);
         cb(null, new GeneralErrors.Database());
-      })
+      });
   } else {
     db('article')
       .insert({
